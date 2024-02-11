@@ -54,9 +54,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(
-                          left: 20.0, top: 20.0, bottom: 20.0),
+                          left: 20.0, top: 20.0, bottom: 20.0, right: 20.0),
                       child: Text(
                         'Sign Up ',
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -112,7 +113,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           backgroundColor: Colors.green,
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/register');
+                          Navigator.pushNamed(context, Login.id);
                         },
                         child: Text(
                           'Sign In',
