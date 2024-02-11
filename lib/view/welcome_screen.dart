@@ -159,7 +159,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               Navigator.pushNamed(context, Login.id);
                             },
                             icon: const Icon(Icons.facebook, color: Colors.blue,size: 40.0,),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  )),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
                             ),
+                        ),
                         const SizedBox(
                           width: 20.0,
                         ),
@@ -171,6 +179,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             'assets/images/google.png',
                             height: 32.0,
                             width: 32.0,
+                          ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                )),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.black),
                           ),
                         )
                       ],
