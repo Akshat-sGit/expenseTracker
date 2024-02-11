@@ -93,7 +93,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       height: 20.0,
                     ),
                     TextField(
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white), 
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -106,6 +106,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                       ),
                       onChanged: (value) => password = value,
+                      obscureText: true,
                     ),
                     const SizedBox(
                       height: 20.0,
