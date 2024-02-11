@@ -2,10 +2,11 @@ import 'package:expense_tracker/view/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String id = 'welcome_screen';
+
   const WelcomeScreen({super.key});
 
   @override
@@ -13,6 +14,10 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  final _auth = FirebaseAuth.instance;
+  late String email;
+  late String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,9 +74,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    const TextField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
+                    TextField(
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         ),
@@ -82,13 +87,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           color: Colors.white,
                         ),
                       ),
+                      onChanged: (value) => email = value,
                     ),
                     const SizedBox(
                       height: 20.0,
                     ),
-                    const TextField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
+                    TextField(
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         ),
@@ -99,6 +105,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           color: Colors.white,
                         ),
                       ),
+                      onChanged: (value) => password = value,
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -114,7 +121,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           backgroundColor: Colors.green,
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, Login.id);
+                          try {
+                            final newUser =
+                                _auth.createUserWithEmailAndPassword(
+                                    email: email, password: password);
+                            // ignore: unnecessary_null_comparison, unrelated_type_equality_checks
+                            if (newUser != _auth.currentUser) {
+                              Navigator.pushNamed(context, Login.id);
+                            }
+                          } catch (e) {
+                            // ignore: avoid_print
+                            print(e);
+                          }
                         },
                         child: Text(
                           'Sign In',
@@ -157,18 +175,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         IconButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, Login.id);
-                            },
-                            icon: const Icon(Icons.facebook, color: Colors.blue,size: 40.0,),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  )),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.black),
-                            ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, Login.id);
+                          },
+                          icon: const Icon(
+                            Icons.facebook,
+                            color: Colors.blue,
+                            size: 40.0,
+                          ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            )),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
+                          ),
                         ),
                         const SizedBox(
                           width: 20.0,
@@ -183,12 +205,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             width: 32.0,
                           ),
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                )),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.black),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            )),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
                           ),
                         )
                       ],
