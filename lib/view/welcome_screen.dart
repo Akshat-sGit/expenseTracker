@@ -17,6 +17,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _auth = FirebaseAuth.instance;
   late String email;
   late String password;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +95,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       height: 20.0,
                     ),
                     TextField(
-                      style: const TextStyle(color: Colors.white), 
+                      style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -130,6 +132,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             if (newUser != _auth.currentUser) {
                               Navigator.pushNamed(context, HomeScreen.id);
                             }
+                            emailController.clear();
+                            passwordController.clear(); 
                           } catch (e) {
                             // ignore: avoid_print
                             print(e);
@@ -177,7 +181,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       children: <Widget>[
                         IconButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, Login.id);
+                            Navigator.pushNamed(context, HomeScreen.id);
                           },
                           icon: const Icon(
                             Icons.facebook,
@@ -198,7 +202,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         IconButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, Login.id);
+                            Navigator.pushNamed(context, HomeScreen.id);
                           },
                           icon: Image.asset(
                             'assets/images/google.png',
