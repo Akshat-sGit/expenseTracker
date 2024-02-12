@@ -2,7 +2,6 @@ import 'package:expense_tracker/config/app_colors.dart';
 import 'package:expense_tracker/widgets/balance_card.dart';
 import 'package:expense_tracker/widgets/top_row.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/transactions_list.dart';
 
