@@ -38,6 +38,9 @@ dependencies:
   animated_text_kit: ^4.2.2
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
+  floating_bottom_navigation_bar: ^1.5.2
+  font_awesome_flutter: ^10.7.0
+  ionicons: ^0.2.2
 
 dev_dependencies:
   flutter_test:
