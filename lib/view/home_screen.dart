@@ -36,24 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  @override
+  @override              
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: null,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              _auth.signOut();
-              Navigator.popUntil(context, WelcomeScreen.id as RoutePredicate);
-            },
-          ),
-        ],
-        title: const Text("Home"),
-        backgroundColor: Colors.green,
-      ),
-      body: ,
+      
     );
   }
 }
