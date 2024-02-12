@@ -2,7 +2,7 @@ import 'package:expense_tracker/firebase_options.dart';
 import 'package:expense_tracker/view/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:expense_tracker/view/login_screen.dart';
+import 'package:expense_tracker/view/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       initialRoute: WelcomeScreen.id,  
       routes: {
         WelcomeScreen.id: (context) => const WelcomeScreen(),
-        Login.id: (context) => const Login(),
+        HomeScreen.id: (context) => const HomeScreen(),
       }, 
     );
 
