@@ -1,6 +1,6 @@
 import 'package:expense_tracker/config/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -55,7 +55,7 @@ class TopRow extends StatelessWidget {
             color: AppColors.tertiaryColor,
             shape: BoxShape.circle,
           ),
-          child: Icon(
+          child:const Icon(
             Ionicons.settings_outline,
             color: Colors.white,
             size: 22.0,
