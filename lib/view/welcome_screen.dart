@@ -134,7 +134,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               Navigator.pushNamed(context, MainScreen.id);
                             }
                             emailController.clear();
-                            passwordController.clear(); 
+                            passwordController.clear();
                           } catch (e) {
                             // ignore: avoid_print
                             print(e);

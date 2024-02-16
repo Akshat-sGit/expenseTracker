@@ -1,3 +1,4 @@
+import 'package:expense_tracker/view/add_expense_screen.dart';
 import 'package:expense_tracker/view/home_screen.dart';
 // import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,26 +46,14 @@ class MainScreen extends StatelessWidget {
               case 0:
                 return const HomeScreen();
               case 1:
-                return Scaffold(
-                  body: Container(
-                    color: AppColors.backgroundColor,
-                    child: const Center(
-                      child: Text(
-                        'Add',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                return const AddExpense(); 
               case 2:
                 return Scaffold(
                   body: Container(
                     color: AppColors.backgroundColor,
                     child: const Center(
                       child: Text(
-                        'Settings',
+                        'Wallet',
                         style: TextStyle(
                           color: Colors.white,
                         ),

@@ -21,20 +21,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding:  EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 16.0),
+               SizedBox(height: 16.0),
               TopRow(),
-              const SizedBox(height: 24.0),
+               SizedBox(height: 24.0),
               BalanceCard(),
-              const SizedBox(height: 24.0),
+               SizedBox(height: 24.0),
               TransactionsList(),
             ],
           ),
