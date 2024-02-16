@@ -48,7 +48,7 @@ class MainScreen extends StatelessWidget {
                 return Scaffold(
                   body: Container(
                     color: AppColors.backgroundColor,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Add',
                         style: TextStyle(
@@ -62,7 +62,7 @@ class MainScreen extends StatelessWidget {
                 return Scaffold(
                   body: Container(
                     color: AppColors.backgroundColor,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Settings',
                         style: TextStyle(

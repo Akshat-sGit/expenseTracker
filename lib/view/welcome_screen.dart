@@ -1,4 +1,5 @@
 import 'package:expense_tracker/view/home_screen.dart';
+import 'package:expense_tracker/view/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -130,7 +131,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     email: email, password: password);
                             // ignore: unnecessary_null_comparison, unrelated_type_equality_checks
                             if (newUser != _auth.currentUser) {
-                              Navigator.pushNamed(context, HomeScreen.id);
+                              Navigator.pushNamed(context, MainScreen.id);
                             }
                             emailController.clear();
                             passwordController.clear(); 
