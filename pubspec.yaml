@@ -41,6 +41,7 @@ dependencies:
   floating_bottom_navigation_bar: ^1.5.2
   font_awesome_flutter: ^10.7.0
   ionicons: ^0.2.2
+  cloud_firestore: ^4.15.5
 
 dev_dependencies:
   flutter_test:

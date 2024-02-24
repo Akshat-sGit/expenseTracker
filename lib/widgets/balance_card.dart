@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class BalanceCard extends StatelessWidget {
   const BalanceCard({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,7 +38,7 @@ class BalanceCard extends StatelessWidget {
           ),
           const SizedBox(height: 8.0),
           const Text(
-            '\$ 4800.00',
+            '\$ 1800.00',
             style: TextStyle(
               fontSize: 32.0,
               fontWeight: FontWeight.bold,
@@ -127,6 +128,32 @@ class BalanceCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class BalanceStream extends StatelessWidget {
+  const BalanceStream({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance.collection('accounts').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final accounts = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: accounts.length,
+            itemBuilder: (context, index) {
+              final account = accounts[index];
+              final balance = account.get('balance');
+              return Text("\$ $balance");
+            },
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }
