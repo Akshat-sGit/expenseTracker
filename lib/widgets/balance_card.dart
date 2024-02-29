@@ -2,7 +2,7 @@ import 'package:expense_tracker/config/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
-
+// import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BalanceCard extends StatelessWidget {
@@ -36,14 +36,8 @@ class BalanceCard extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          const SizedBox(height: 8.0),
-          const Text(
-            '\$ 1800.00',
-            style: TextStyle(
-              fontSize: 32.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          const SizedBox(height: 16.0),
+          const BalanceStream(),
           const SizedBox(height: 24.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,13 +139,17 @@ class BalanceStream extends StatelessWidget {
           return ListView.builder(
             itemCount: accounts.length,
             itemBuilder: (context, index) {
-              final account = accounts[index];
-              final balance = account.get('balance');
+              final account = accounts[accounts.length - 1];
+              final balance = account.get('Balance');
               return Text("\$ $balance");
             },
           );
         } else {
-          return const CircularProgressIndicator();
+          return const LinearProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+              AppColors.accentColor,
+            ),
+          );
         }
       },
     );
