@@ -128,29 +128,24 @@ class BalanceCard extends StatelessWidget {
 
 class BalanceStream extends StatelessWidget {
   const BalanceStream({super.key});
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('accounts').snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final money = snapshot.data!.docs;
-          return ListView.builder(
-            itemCount: money.length,
-            itemBuilder: (context, index) {
-              final account = money[money.length - 1];
-              final balance = account.get('Balance');
-              return Text("\$ $balance");
-            },
-          );
-        } else {
+        if (!snapshot.hasData) {
           return const LinearProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(
               AppColors.accentColor,
             ),
           );
         }
+        
+        final money = snapshot.data!.docs;
+        final balance =
+            money.last.get('Balance'); // Use last() to get the last document
+
+        return Text("\$ $balance");
       },
     );
   }
