@@ -32,7 +32,7 @@ class BalanceCard extends StatelessWidget {
             'Total Balance',
             style: GoogleFonts.dmSans(
               fontSize: 18.0,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
@@ -131,15 +131,15 @@ class BalanceStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('accounts').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final accounts = snapshot.data!.docs;
+          final money = snapshot.data!.docs;
           return ListView.builder(
-            itemCount: accounts.length,
+            itemCount: money.length,
             itemBuilder: (context, index) {
-              final account = accounts[accounts.length - 1];
+              final account = money[money.length - 1];
               final balance = account.get('Balance');
               return Text("\$ $balance");
             },
