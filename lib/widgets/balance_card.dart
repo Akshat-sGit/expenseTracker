@@ -141,9 +141,7 @@ class BalanceStream extends StatelessWidget {
           );
         }
         final money = snapshot.data!.docs;
-        final balance =
-            money.last.get('Balance'); // Use last() to get the last document
-
+        final balance = money.last.get('Balance'); // Use last() to get the last document
         return Text("\$ $balance");
       },
     );
