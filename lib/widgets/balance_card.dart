@@ -133,16 +133,28 @@ class BalanceStream extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('accounts').snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const LinearProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(
               AppColors.accentColor,
             ),
           );
+        } else if (snapshot.hasError) {
+          return const Text('Error loading balance');
+        } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No data available');
+        } else {
+          final money = snapshot.data!.docs;
+          final balance =
+              money.last.get('Balance'); // Use last() to get the last document
+          return Text(
+            "\$ $balance",
+            style: const TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          );
         }
-        final money = snapshot.data!.docs;
-        final balance = money.last.get('Balance'); // Use last() to get the last document
-        return Text("\$ $balance");
       },
     );
   }
