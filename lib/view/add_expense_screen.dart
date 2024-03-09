@@ -47,8 +47,9 @@ class AddExpense extends StatelessWidget {
                   top: 8.0, left: 40.0, right: 40.0, bottom: 10.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(15.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   backgroundColor: Colors.green,
                 ),
@@ -63,8 +64,9 @@ class AddExpense extends StatelessWidget {
                   top: 8.0, left: 40.0, right: 40.0, bottom: 10.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(15.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   backgroundColor: Colors.green,
                 ),
@@ -79,8 +81,9 @@ class AddExpense extends StatelessWidget {
                   top: 8.0, left: 40.0, right: 40.0, bottom: 10.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(15.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   backgroundColor: Colors.green,
                 ),
