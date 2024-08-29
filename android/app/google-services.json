@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "799091892716",
-    "firebase_url": "https://expensetracker-66e6a-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "expensetracker-66e6a",
-    "storage_bucket": "expensetracker-66e6a.appspot.com"
+    "project_number": "671994291567",
+    "project_id": "expensetracker-ba9a1",
+    "storage_bucket": "expensetracker-ba9a1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:799091892716:android:62b1ab22313250627760c9",
+        "mobilesdk_app_id": "1:671994291567:android:3fa0345f01cd232aefb49a",
         "android_client_info": {
           "package_name": "com.AkshatAgarwal.expenseTracker"
         }
@@ -16,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCCj-3c1_7NExbmaTb_I3aFLI5JTj0AtSQ"
+          "current_key": "AIzaSyABBLOPeUvUjZTHJcJ0omGDU0gHyuLuA8M"
         }
       ],
       "services": {

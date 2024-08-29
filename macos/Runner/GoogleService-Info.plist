@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDzE2Zcrnv2BQoVV9iP0GX-OKqgcjsg0Bo</string>
+	<string>AIzaSyA0fgaNd3NXZS3Dl5bGiMQpc1QjASP722c</string>
 	<key>GCM_SENDER_ID</key>
-	<string>799091892716</string>
+	<string>671994291567</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.expenseTracker.RunnerTests</string>
+	<string>com.example.expenseTracker</string>
 	<key>PROJECT_ID</key>
-	<string>expensetracker-66e6a</string>
+	<string>expensetracker-ba9a1</string>
 	<key>STORAGE_BUCKET</key>
-	<string>expensetracker-66e6a.appspot.com</string>
+	<string>expensetracker-ba9a1.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,8 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:799091892716:ios:f6eb3eb1c1bd437d7760c9</string>
-	<key>DATABASE_URL</key>
-	<string>https://expensetracker-66e6a-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+	<string>1:671994291567:ios:4538486f13bfc897efb49a</string>
 </dict>
 </plist>

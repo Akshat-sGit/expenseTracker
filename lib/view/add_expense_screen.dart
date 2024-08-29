@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 class AddExpense extends StatelessWidget {
   const AddExpense({super.key});
 
+  static const String id = "AddExpense";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
