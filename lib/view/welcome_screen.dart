@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/view/home_screen.dart';
 import 'package:expense_tracker/view/main_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +23,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   late String password;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _passwordVisible = false; // Add this to manage the visibility state of the password
 
   @override
   Widget build(BuildContext context) {
@@ -91,19 +95,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   TextField(
                     controller: passwordController,
                     style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
                       hintText: 'Password',
-                      hintStyle: TextStyle(color: Colors.white),
-                      prefixIcon: Icon(
+                      hintStyle: const TextStyle(color: Colors.white),
+                      prefixIcon: const Icon(
                         Icons.lock,
                         color: Colors.white,
                       ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
                     ),
                     onChanged: (value) => password = value,
-                    obscureText: true,
+                    obscureText: !_passwordVisible, // Use this to toggle visibility
                   ),
                   const SizedBox(height: 20.0),
                   Padding(
@@ -118,18 +135,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                       onPressed: () async {
                         try {
-                          final newUser =
-                              await _auth.createUserWithEmailAndPassword(
-                                  email: email, password: password);
-                          if (newUser.user != null) {
-                            Navigator.pushNamed(context, MainScreen.id);
-                          }
-                          emailController.clear();
-                          passwordController.clear();
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
+                          final newUser = await _auth.createUserWithEmailAndPassword(
+                            email: email, password: password);
+                            if (newUser.user != null) {
+                              await FirebaseFirestore.instance.collection('users').doc(newUser.user!.uid).set({
+                                'email': email,
+                                'createdAt': FieldValue.serverTimestamp(), // Save the creation time
+                                'userId': newUser.user!.uid, // Store the user's unique ID
+                  });
+                  Navigator.pushNamed(context, MainScreen.id);
+                  }
+                  emailController.clear();
+                  passwordController.clear();
+                  } catch (e) {
+                    debugPrint('$e');
+                  }
+                },
                       child: Text(
                         'Sign In',
                         style: GoogleFonts.poppins(
@@ -150,7 +171,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   const SizedBox(height: 20.0),
                   Text(
-                    'or sign up with:',
+                    'or Sign Up with:',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: 20.0,

@@ -1,20 +1,21 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class AddExpense extends StatefulWidget {
-  const AddExpense({super.key});
+class AddIncome extends StatefulWidget {
+  const AddIncome({super.key});
 
-  static const String id = "AddExpense";
+  static const String id = "AddIncome";
 
   @override
-  _AddExpenseState createState() => _AddExpenseState();
+  State<AddIncome> createState() => _AddIncomeState();
 }
 
-class _AddExpenseState extends State<AddExpense> {
+class _AddIncomeState extends State<AddIncome> {
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
@@ -30,7 +31,7 @@ class _AddExpenseState extends State<AddExpense> {
     super.dispose();
   }
 
-  Future<void> _addExpense() async {
+  Future<void> _addIncome() async{
     if (_formKey.currentState!.validate()) {
       final currentUser = FirebaseAuth.instance.currentUser;
       final amount = int.parse(_amountController.text);
@@ -38,52 +39,49 @@ class _AddExpenseState extends State<AddExpense> {
       final note = _noteController.text;
 
       // Reference to Firestore collection
-      final expensesCollection = FirebaseFirestore.instance
+      final incomeCollection = FirebaseFirestore.instance
           .collection('users')
           .doc(currentUser?.uid)
-          .collection('expenses');
+          .collection('income');
       try {
-        // Add the expense data to Firestore
-        await expensesCollection.add({
+        // Add the income data to Firestore
+        await incomeCollection.add({
           'amount': amount,
           'category': category,
           'note': note,
           'date': _selectedDate,
-          'created_at': FieldValue.serverTimestamp(), 
+          'created_at': FieldValue.serverTimestamp(),
         });
 
         // Show a success message
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Expense added successfully!')),
+          const SnackBar(content: Text('Income added successfully!')),
         );
 
         // Clear the fields
         _amountController.clear();
         _categoryController.clear();
         _noteController.clear();
-        setState(() {
-          _selectedDate = DateTime.now();
-        });
       } catch (e) {
-        // Handle errors
+        // Show an error message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add expense: $e')),
+          const SnackBar(content: Text('An error occurred!')),
         );
       }
     }
   }
 
-  Future<void> _pickDate() async {
-    final DateTime? picked = await showDatePicker(
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      firstDate: DateTime(2015),
+      lastDate: DateTime(2050),
     );
-    if (picked != null && picked != _selectedDate) {
+    if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
-        _selectedDate = picked;
-      });
+        _selectedDate = pickedDate;
+      }); 
     }
   }
 
@@ -100,7 +98,7 @@ class _AddExpenseState extends State<AddExpense> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(
-                'Add Expenses',
+                'Add Income',
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 24.0,
@@ -189,7 +187,7 @@ class _AddExpenseState extends State<AddExpense> {
                   ),
                   backgroundColor: Colors.green,
                 ),
-                onPressed: _pickDate,
+                onPressed: _selectDate,
                 child: Text(
                   'Date ${_selectedDate.toLocal()}'.split(' ')[0],
                   style: GoogleFonts.poppins(
@@ -209,9 +207,9 @@ class _AddExpenseState extends State<AddExpense> {
                   ),
                   backgroundColor: Colors.green,
                 ),
-                onPressed: _addExpense,
+                onPressed: _addIncome,
                 child: Text(
-                  'Add Expense',
+                  'Add Income',
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,

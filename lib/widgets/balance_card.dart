@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({super.key});
@@ -50,8 +51,17 @@ class BalanceStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('accounts').snapshots(),
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      return const Text('No user logged in');
+    }
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const LinearProgressIndicator(
@@ -60,117 +70,148 @@ class BalanceStream extends StatelessWidget {
             ),
           );
         } else if (snapshot.hasError) {
-          // Print the error to the console for debugging
           debugPrint('Error loading balance: ${snapshot.error}');
           return const Text('Error loading balance');
-        } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        } else if (!snapshot.hasData || !snapshot.data!.exists) {
           return const Text('No data available');
         } else {
-          try {
-            final money = snapshot.data!.docs;
-            final income = money.last.get('income');
-            final expense = money.last.get('expense');
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "\$ ${income - expense}",
-                  style: const TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
+          return FutureBuilder<Map<String, dynamic>>(
+            future: _calculateIncomeAndExpense(currentUser.uid),
+            builder: (context, incomeExpenseSnapshot) {
+              if (incomeExpenseSnapshot.connectionState ==
+                  ConnectionState.waiting) {
+                return const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColors.accentColor,
                   ),
-                ),
-                const SizedBox(height: 24.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                );
+              } else if (incomeExpenseSnapshot.hasError) {
+                debugPrint(
+                    'Error calculating income and expense: ${incomeExpenseSnapshot.error}');
+                return const Text('Error calculating balance');
+              } else if (!incomeExpenseSnapshot.hasData) {
+                return const Text('No data available');
+              } else {
+                final income = incomeExpenseSnapshot.data!['income'];
+                final expense = incomeExpenseSnapshot.data!['expense'];
+                final balance = income - expense;
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: const BoxDecoration(
-                            color: AppColors.backgroundColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Ionicons.arrow_down,
-                            color: AppColors.accentColor,
-                            size: 16.0,
-                          ),
-                        ),
-                        const SizedBox(width: 8.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Income',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              "\$ $income",
-                              style: const TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    Text(
+                      "\u{20b9}$balance",
+                      style: const TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 24.0),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: const BoxDecoration(
-                            color: AppColors.backgroundColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Ionicons.arrow_up,
-                            color: Colors.red,
-                            size: 16.0,
-                          ),
+                        _buildIncomeExpenseItem(
+                          context: context,
+                          title: 'Income',
+                          amount: income,
+                          icon: Ionicons.arrow_down,
+                          iconColor: AppColors.accentColor,
                         ),
-                        const SizedBox(width: 8.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Expenses',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              "\$ $expense",
-                              style: const TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                        const Spacer(),
+                        _buildIncomeExpenseItem(
+                          context: context,
+                          title: 'Expenses',
+                          amount: expense,
+                          icon: Ionicons.arrow_up,
+                          iconColor: Colors.red,
                         ),
                       ],
                     ),
                   ],
-                ),
-              ],
-            );
-          } catch (e) {
-            debugPrint('Exception during data retrieval: $e');
-            return const Text('Error processing balance data');
-          }
+                );
+              }
+            },
+          );
         }
       },
+    );
+  }
+
+  Future<Map<String, dynamic>> _calculateIncomeAndExpense(String userId) async {
+    final incomeSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('income')
+        .get();
+
+    final expenseSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('expenses')
+        .get();
+
+    double totalIncome = 0;
+    double totalExpense = 0;
+
+    for (var doc in incomeSnapshot.docs) {
+      totalIncome += (doc.data()['amount'] ?? 0).toDouble();
+    }
+
+    for (var doc in expenseSnapshot.docs) {
+      totalExpense += (doc.data()['amount'] ?? 0).toDouble();
+    }
+
+    return {
+      'income': totalIncome,
+      'expense': totalExpense,
+    };
+  }
+
+  Widget _buildIncomeExpenseItem({
+    required BuildContext context,
+    required String title,
+    required double amount,
+    required IconData icon,
+    required Color iconColor,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: const BoxDecoration(
+            color: AppColors.backgroundColor,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            color: iconColor,
+            size: 16.0,
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.dmSans(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+            ),
+            Text(
+              "\u{20b9}$amount",
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

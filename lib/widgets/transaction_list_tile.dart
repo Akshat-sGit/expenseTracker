@@ -66,7 +66,7 @@ class TransactionListTile extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            '- \$ $amount',
+            '- \u{20B9}$amount',
             style: GoogleFonts.dmSans(
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
