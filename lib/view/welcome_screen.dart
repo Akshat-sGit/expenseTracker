@@ -23,31 +23,42 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   late String password;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool _passwordVisible = false; // Add this to manage the visibility state of the password
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green,
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10.0, top: 50.0),
-            child: Center(
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  TypewriterAnimatedText(
-                    'Expense Tracker',
-                    textStyle: GoogleFonts.archivoBlack(
-                      fontSize: 25.0,
-                      color: Colors.white,
-                    ),
-                    speed: const Duration(milliseconds: 200),
-                  ),
-                ],
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          children: [
+            Text(
+              'Expense ',
+              style: GoogleFonts.archivoBlack(
+                fontSize: 25.0,
+                color: Colors.white,
               ),
             ),
-          ),
+            AnimatedTextKit(
+              animatedTexts: [
+                TypewriterAnimatedText(
+                  'Tracker',
+                  textStyle: GoogleFonts.archivoBlack(
+                    fontSize: 25.0,
+                    color: Colors.white,
+                  ),
+                  speed: const Duration(microseconds: 200)
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -120,7 +131,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                     ),
                     onChanged: (value) => password = value,
-                    obscureText: !_passwordVisible, // Use this to toggle visibility
+                    obscureText: !_passwordVisible,
                   ),
                   const SizedBox(height: 20.0),
                   Padding(
@@ -135,24 +146,33 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                       onPressed: () async {
                         try {
-                          final newUser = await _auth.createUserWithEmailAndPassword(
-                            email: email, password: password);
-                            if (newUser.user != null) {
-                              await FirebaseFirestore.instance.collection('users').doc(newUser.user!.uid).set({
-                                'email': email,
-                                'createdAt': FieldValue.serverTimestamp(), // Save the creation time
-                                'userId': newUser.user!.uid, // Store the user's unique ID
-                  });
-                  Navigator.pushNamed(context, MainScreen.id);
-                  }
-                  emailController.clear();
-                  passwordController.clear();
-                  } catch (e) {
-                    debugPrint('$e');
-                  }
-                },
+                          final newUser = await _auth
+                              .createUserWithEmailAndPassword(
+                                  email: email, password: password);
+                          if (newUser.user != null) {
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(newUser.user!.uid)
+                                .set({
+                              'email': email,
+                              'createdAt': FieldValue.serverTimestamp(),
+                              'userId': newUser.user!.uid,
+                            });
+                            Navigator.pushNamed(context, MainScreen.id);
+                          }
+                          emailController.clear();
+                          passwordController.clear();
+                        } catch (e) {
+                          debugPrint('$e');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('$e'),
+                            ),
+                          );
+                        }
+                      },
                       child: Text(
-                        'Sign In',
+                        'Sign Up',
                         style: GoogleFonts.poppins(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -171,7 +191,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   const SizedBox(height: 20.0),
                   Text(
-                    'or Sign Up with:',
+                    'Already have an account?',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: 20.0,
@@ -179,32 +199,53 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 30.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, HomeScreen.id);
-                        },
-                        icon: const Icon(
-                          Icons.facebook,
-                          color: Colors.blue,
-                          size: 40.0,
+                  const SizedBox(height: 20.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(15.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        backgroundColor: Colors.green,
+                      ),
+                      onPressed: () async {
+                        try {
+                          final existingUser = await _auth
+                              .signInWithEmailAndPassword(
+                                  email: email, password: password);
+                          if (existingUser.user != null) {
+                            Navigator.pushNamed(context, MainScreen.id);
+                          }
+                          emailController.clear();
+                          passwordController.clear();
+                        } catch (e) {
+                          debugPrint('$e');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '$e',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      child: Text(
+                        'Sign In',
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
                         ),
                       ),
-                      const SizedBox(width: 20.0),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, HomeScreen.id);
-                        },
-                        icon: Image.asset(
-                          'assets/images/google.png',
-                          height: 32.0,
-                          width: 32.0,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
