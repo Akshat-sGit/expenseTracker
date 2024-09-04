@@ -1,8 +1,9 @@
-import 'package:expense_tracker/config/app_colors.dart';
-import 'package:expense_tracker/widgets/transaction_list_tile.dart';
+// import 'package:expense_tracker/config/app_colors.dart';
+import 'package:expense_tracker/widgets/expanded_tile.dart';
+// import 'package:expense_tracker/widgets/transaction_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ionicons/ionicons.dart';
+// import 'package:ionicons/ionicons.dart';
 
 class TransactionsList extends StatelessWidget {
   const TransactionsList({super.key});
@@ -39,36 +40,7 @@ class TransactionsList extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12.0),
-        const TransactionListTile(
-          title: 'Shopping',
-          date: '14th Feb 2023',
-          amount: '200.00',
-          icon: Icon(
-            Ionicons.bag,
-            color: AppColors.accentColor,
-            size: 24.0,
-          ),
-        ),
-        const TransactionListTile(
-          title: 'Food',
-          date: '5th Feb 2023',
-          amount: '200.00',
-          icon: Icon(
-            Ionicons.pizza,
-            color: AppColors.accentColor,
-            size: 24.0,
-          ),
-        ),
-        const TransactionListTile(
-          title: 'Travel',
-          date: '31st Jan 2023',
-          amount: '200.00',
-          icon: Icon(
-            Ionicons.airplane,
-            color: AppColors.accentColor,
-            size: 24.0,
-          ),
-        ),
+        const ExpandedTile(), 
       ],
     );
   }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../view/home_screen.dart';
+
 class TopRow extends StatelessWidget {
   const TopRow({
     super.key,
@@ -49,16 +51,42 @@ class TopRow extends StatelessWidget {
           ],
         ),
         const Spacer(),
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: const BoxDecoration(
-            color: AppColors.tertiaryColor,
-            shape: BoxShape.circle,
+        GestureDetector(
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+            
+            ) ;
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            decoration: const BoxDecoration(
+              color: AppColors.tertiaryColor,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Ionicons.reload,
+              color: Colors.white,
+              size: 22.0,
+            ),
           ),
-          child:const Icon(
-            Ionicons.settings_outline,
-            color: Colors.white,
-            size: 22.0,
+        ),
+        const SizedBox(width: 12.0),
+        GestureDetector(
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            decoration: const BoxDecoration(
+              color: AppColors.tertiaryColor,
+              shape: BoxShape.circle,
+            ),
+            child:const Icon(
+              Ionicons.settings_outline,
+              color: Colors.white,
+              size: 22.0,
+            ),
           ),
         ),
       ],
