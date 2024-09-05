@@ -24,19 +24,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return const Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
-        child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 16.0),
-              TopRow(),
-              SizedBox(height: 24.0),
-              BalanceCard(),
-              SizedBox(height: 24.0),
-              TransactionsList(),
-            ],
+        child: SingleChildScrollView(  // Make the entire screen scrollable
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 16.0),
+                TopRow(),
+                SizedBox(height: 24.0),
+                BalanceCard(),
+                SizedBox(height: 24.0), 
+                TransactionsList(),  // This already has its own ListView.builder
+              ],
+            ),
           ),
         ),
       ),
