@@ -55,7 +55,7 @@ class _AddIncomeState extends State<AddIncome> {
 
         // Show a success message
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Income added successfully!')),
+          const SnackBar(content: Text('Income added successfully!', style: TextStyle(color: Colors.white),), backgroundColor: Colors.green,), 
         );
 
         // Clear the fields
